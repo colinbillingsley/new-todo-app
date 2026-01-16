@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "strict": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@db/*": ["database/*"],
+      "@schema/*": ["database/schema/*"]
+    }
+  },
+  "ts-node": {
+    "esm": true
+  }
+}

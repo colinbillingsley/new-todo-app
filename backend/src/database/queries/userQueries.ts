@@ -25,7 +25,7 @@ export async function createUser(userData: InsertUser) {
   // create new user object with hashed password
   const userWithHashedPassword = {
     ...userData,
-    hashedPassword,
+    password: hashedPassword,
   };
 
   // insert user into user table in db

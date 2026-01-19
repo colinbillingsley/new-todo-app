@@ -6,20 +6,16 @@ import Link from "next/link";
 import { ArrowUpRightFromSquare, LoaderCircle } from "lucide-react";
 import "dotenv/config";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 import * as z from "zod";
-import { redirect } from "next/navigation";
 
-export const UserSignInSchema = z.object({
-  id: z.uuid(),
-  name: z.string(),
+export const UserLoginSchema = z.object({
   username: z.string().trim(),
   password: z.string().trim(),
 });
 
-export type User = z.infer<typeof UserSignInSchema>;
+export type User = z.infer<typeof UserLoginSchema>;
 
-function SignupForm() {
+function LoginForm() {
   const {
     register,
     handleSubmit,
@@ -29,15 +25,13 @@ function SignupForm() {
   const onSubmit: SubmitHandler<User> = async (data) => {
     await axios
       .post(
-        `${process.env.BASE_URL ?? "http://localhost:4000"}/api/user/register`,
+        `${process.env.BASE_URL ?? "http://localhost:4000"}/api/user/login`,
         {
           ...data,
-          id: uuidv4(),
         },
       )
       .then((res) => {
         console.log(res);
-        redirect("/login");
       })
       .catch((error) => {
         console.log(error);
@@ -57,18 +51,12 @@ function SignupForm() {
       className="space-y-4 bg-white mx-auto min-h-screen w-2xl p-6"
     >
       <div>
-        <h1 className="text-3xl font-bold">Create an account!</h1>
+        <h1 className="text-3xl font-bold">Log In</h1>
         <span className="text-sm text-gray-400">
-          Fill in all the fields to create an account, so you can begin creating
-          your todo lists!
+          Enter your credentials to log in and start organizing your tasks!
         </span>
       </div>
 
-      <Input
-        label="Full Name"
-        {...register("name", { required: "Full Name is required" })}
-        error={errors.name?.message as string}
-      />
       <Input
         label="Username"
         {...register("username", { required: "Username required" })}
@@ -85,10 +73,10 @@ function SignupForm() {
         {isSubmitting ? (
           <div className="inline-flex items-center justify-center gap-2">
             <LoaderCircle className="size-4 animate-spin text-white" />
-            <p>Creating Account...</p>
+            <p>Logging in...</p>
           </div>
         ) : (
-          <span>Create Account</span>
+          <span>Login</span>
         )}
       </Button>
 
@@ -99,12 +87,12 @@ function SignupForm() {
       )}
 
       <div className="flex items-center gap-4 mt-8">
-        <p className="text-sm">Already have an account?</p>
+        <p className="text-sm">Don&apos;t have an account?</p>
         <Link
-          href={"/login"}
+          href={"/signup"}
           className="inline-flex items-center justify-center gap-2 text-emerald-600 hover:text-emerald-700 font-bold text-sm tracking-wider underline hover:underline-offset-2 transition-all"
         >
-          <p>Login here</p>
+          <p>Create an account here</p>
           <ArrowUpRightFromSquare className="size-4" strokeWidth={3} />
         </Link>
       </div>
@@ -112,4 +100,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default LoginForm;

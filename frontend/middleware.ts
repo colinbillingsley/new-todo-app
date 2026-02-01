@@ -2,15 +2,24 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
-	const token = req.cookies.get("auth_token")?.value; // <- .value is required
-	console.log("Req.cookies: " + req.cookies);
-	console.log("Middleware - auth_token:", token);
+	const token = req.cookies.get("auth_token")?.value;
 
-	// If token is missing, redirect to login
-	if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+	// paths to protect
+	const protectedPaths = ["/dashboard", "/lists"];
+
+	// if no token and current path is protected
+	if (
+		!token &&
+		protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path))
+	) {
 		return NextResponse.redirect(new URL("/login", req.url));
 	}
 
-	// If token exists or not accessing protected path, continue
+	// otherwise continue
 	return NextResponse.next();
 }
+
+// paths where this middleware runs
+export const config = {
+	matcher: ["/dashboard/:path*", "/lists/:path*"],
+};

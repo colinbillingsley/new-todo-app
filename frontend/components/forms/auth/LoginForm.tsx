@@ -1,7 +1,7 @@
 "use client";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/forms/Input";
-import { Button } from "../Button";
+import { Button } from "../../Button";
 import Link from "next/link";
 import { ArrowUpRightFromSquare, LoaderCircle } from "lucide-react";
 import axios from "axios";
@@ -34,10 +34,6 @@ function LoginForm() {
 				router.push("/dashboard");
 			})
 			.catch((error) => {
-				console.log("AXIOS ERROR:", error);
-				console.log("RESPONSE:", error.response);
-				console.log("DATA:", error.response?.data);
-
 				const message =
 					error.response?.data?.message ||
 					error.response?.data?.error ||
